@@ -7,6 +7,7 @@ import java.util.*;
 /**
  * @author anish
  * @class: Implementation of the Prim Algorithm
+ * @description: Used PriorityQueue in the implementation, could have used TreeSet instead
  */
 
 public class Prim {
@@ -60,20 +61,23 @@ public class Prim {
         }
     }
 
-    private static void prim(Vertex[] graph) {
-        Set<Vertex> cutSet = new HashSet<>(Arrays.asList(graph));
+    private static void prim(Vertex[] graph, int n) {
+        boolean[] selected = new boolean[n];
         PriorityQueue<Vertex> minQ = new PriorityQueue<>(new VertexComparator());
 
         graph[0].key = 0;
         minQ.add(graph[0]);
 
-        while(!cutSet.isEmpty()) {
+        for(int i = 0; i < n; ++i) {
+            if(minQ.isEmpty()) {
+              return;
+            }
             Vertex v = minQ.poll();
-            cutSet.remove(v);
+            selected[v.value] = true;
 
             for(Vertex u: v.adjList.keySet()) {
                 int edgeW = v.adjList.get(u);
-                if(cutSet.contains(u) && edgeW < u.key) {
+                if(!selected[u.value] && edgeW < u.key) {
                     minQ.remove(u);
                     u.key = edgeW;
                     u.parent = v;
@@ -93,7 +97,7 @@ public class Prim {
         int n = in.nextInt();
         int m = in.nextInt();
         Vertex[] graph = new Vertex[n];
-        for(int i = 0; i < n; i++) { graph[i] = new Vertex(i + 1); }
+        for(int i = 0; i < n; i++) { graph[i] = new Vertex(i); }
 
         for(int i = 0; i < m; i++) {
             Vertex v = graph[in.nextInt() - 1];
@@ -102,7 +106,7 @@ public class Prim {
             v.adjList.put(u, w);
         }
 
-        prim(graph);
+        prim(graph, n);
         out.println("Please enter vertex from which we want to trace path: ");
         List<Vertex> graphPath = new ArrayList<>();
         Vertex v = graph[in.nextInt() - 1];
