@@ -9,7 +9,8 @@ import java.util.*;
  * @class: Implementation of a graph based on Edge Data Structure
  * @description: A graph based on edge-representation that considers the edge properties
  * as means of performing operations, optimizations. Efficient for sorting on edges, etc
- * bi-directionality in terms of edges may not be needed.
+ * bi-directionality in terms of edges may not be needed. Never use set for edge-based
+ * representation of graph.
  */
 
 public class EdgeBasedGraph {
@@ -71,14 +72,13 @@ public class EdgeBasedGraph {
         InputReader in = new InputReader();
 
         int m = in.nextInt();
-        Set<Edge> graph = new TreeSet<>(new EdgeComparator());
+        List<Edge> graph = new ArrayList<>();
         for(int i = 0; i < m; ++i) {
             graph.add(new Edge(in.nextInt(), in.nextInt(), in.nextInt()));
         }
 
-        for(Edge edge: graph) {
-            out.println("{u, v, w}: " + edge);
-        }
+        Collections.sort(graph, new EdgeComparator());
+        for(Edge edge: graph) { out.println("{u, v, w}: " + edge); }
         out.close();
         in.close();
     }

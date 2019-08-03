@@ -10,7 +10,8 @@ import java.util.*;
  * @description: Given a graph of 'n' cities and the distance between each city as the edge
  * weight between those cities, we must find the shortest distance that Mohit must cover in
  * order to cover all the cities. Find minimum weight MST using kruskal's algorithm then
- * total weight to cover all junctions and return will be double of that weight.
+ * total weight to cover all junctions and return will be double of that weight. Never
+ * use Set in an edge-based representation of graph especially when edge is a property.
  */
 
 public class MohitSwiggyKruskal {
@@ -75,7 +76,7 @@ public class MohitSwiggyKruskal {
         if(u != v) { parent[u] = v; }
     }
 
-    private static int kruskal(Set<Edge> graph, int N) {
+    private static int kruskal(List<Edge> graph, int N) {
         List<Edge> mst = new ArrayList<>();
         int[] parent = new int[N];
         makeSet(parent, N);
@@ -91,7 +92,7 @@ public class MohitSwiggyKruskal {
         return cost;
     }
 
-    private static int getDistance(Set<Edge> graph, int N) {
+    private static int getDistance(List<Edge> graph, int N) {
         return kruskal(graph, N) * 2;
     }
 
@@ -101,11 +102,12 @@ public class MohitSwiggyKruskal {
 
         int N = in.nextInt() + 1;
         int M = in.nextInt();
-        Set<Edge> graph = new TreeSet<>();
+        List<Edge> graph = new ArrayList<>();
         for(int i = 0; i < M; ++i) {
             graph.add(new Edge(in.nextInt(), in.nextInt(), in.nextInt()));
         }
 
+        Collections.sort(graph);
         out.println(getDistance(graph, N));
         out.close();
         in.close();
