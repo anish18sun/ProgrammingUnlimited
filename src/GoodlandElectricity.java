@@ -7,15 +7,17 @@ import java.util.StringTokenizer;
 
 /**
  * @author anish
- * @class: Implementation of Candies problem (Hackerrank)
- * @description: Given a set of labels of students(eg: [5,4,3,2,1,2,3,4]), a teacher must
- * distribute candies to students such that those with greater labels get more candies than
- * those with less-valued labels.The objective is to minimize the total cost of candies handed out.
+ * @class: Implementation of Goodland Electricity(Hackerrank)
+ * @description: Given a list of cities in the form [0,0,1,1,1,0,0] where '0' indicates
+ * that a city cannot have a power plant while '1' indicates that a city can have a power
+ * plant. For a given number 'k', a power plant built in a city can cover up to 'k' cities
+ * left and right of it. We must find the minimum number of cities in which to build power
+ * plants so that all cities are supplied with electricity.
  */
 
-public class Candies {
+public class GoodlandElectricity {
 
-    static class InputReader {
+    static class InputReader{
         private BufferedReader reader;
         private StringTokenizer tokenizer;
 
@@ -46,25 +48,19 @@ public class Candies {
         }
     }
 
-    private static long getMinCandies(int[] arr, int n) {
-        int[] aux = new int[n];
-        Arrays.fill(aux,1);
-        long cost = 0;
+    private static int getMinCities(int[] pos, int k, int n) {
+        int cost = 0;
 
-        for(int i = 1; i < n; ++i) {
-            if(arr[i] > arr[i - 1]) {
-                aux[i] = aux[i - 1] + 1;
-            }
+        for(int i = 0; i < n;) {
+            int range = i + (k - 1);
+            range = (range >= n) ? n - 1 : range;
+
+            int powerPos = pos[range];
+            if((powerPos + k) <= i || powerPos == -1) { return -1; }
+
+            i = powerPos + k;
+            cost += 1;
         }
-
-        for(int i = n - 2; i >= 0; --i) {
-            if(arr[i] > arr[i + 1]) {
-                int value = aux[i + 1] + 1;
-                aux[i] = (value > aux[i]) ? value : aux[i];
-            }
-        }
-
-        for(int count: aux) { cost += count; }
         return cost;
     }
 
@@ -72,11 +68,22 @@ public class Candies {
         PrintStream out = System.out;
         InputReader in = new InputReader();
 
+        int powerPos = -1;
         int n = in.nextInt();
+        int k = in.nextInt();
         int[] arr = new int[n];
-        for(int i = 0; i < n; ++i) { arr[i] = in.nextInt(); }
+        int[] pos = new int[n];
+        Arrays.fill(pos, -1);
 
-        out.println(getMinCandies(arr, n));
+        for(int i = 0; i < n; ++i) {
+            arr[i] = in.nextInt();
+            if(arr[i] == 1) {
+                powerPos = i;
+            }
+            pos[i] = powerPos;
+        }
+
+        out.println(getMinCities(pos, k, n));
         out.close();
         in.close();
     }
