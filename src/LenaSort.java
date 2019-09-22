@@ -2,17 +2,15 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintStream;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Arrays;
 import java.util.StringTokenizer;
 
 /**
  * @author anish
- * @class: Implementation of 'Substring with Concatenation of All Words' problem - LeetCode
- * @Notes: For substring checking, efficient method would be KMP algorithm.
+ * @class: Implementation of Lena Sort problem (Hackerrank)
  */
 
-public class SubstringConcatenation {
+public class LenaSort {
 
   static class InputReader {
     private BufferedReader reader;
@@ -20,15 +18,14 @@ public class SubstringConcatenation {
 
     public InputReader() {
       tokenizer = null;
-      reader = new BufferedReader(new InputStreamReader(System.in), 32768);
+      reader = new BufferedReader(new InputStreamReader(System.in),32768);
     }
 
     public String next() {
-      while (tokenizer == null || !tokenizer.hasMoreTokens()) {
+      while(tokenizer == null || !tokenizer.hasMoreTokens()) {
         try {
           tokenizer = new StringTokenizer(reader.readLine());
-        }
-        catch (IOException e) {
+        } catch(IOException e) {
           throw new RuntimeException(e);
         }
       }
@@ -44,26 +41,24 @@ public class SubstringConcatenation {
         throw new RuntimeException(e);
       }
     }
-
   }
 
-  private static List<Integer> getSubstringIndexes(String text, String[] words, int n) {
-    List<Integer> indexes = new ArrayList<>();
+  private static int[] getArray(int len, int c) {
 
-
-    return indexes;
+    return new int[0];
   }
 
   public static void main(String[] args) {
     PrintStream out = System.out;
     InputReader in = new InputReader();
 
-    int n = in.nextInt();
-    String text = in.next();
-    String[] words = new String[n];
-    for(int i = 0; i < n; ++i) { words[i] = in.next(); }
 
-    out.println(getSubstringIndexes(text, words, n));
+    int q = in.nextInt();
+    while(q-- > 0) {
+      int len = in.nextInt();
+      int c = in.nextInt();
+      out.println(Arrays.toString(getArray(len, c)));
+    }
     out.close();
     in.close();
   }
