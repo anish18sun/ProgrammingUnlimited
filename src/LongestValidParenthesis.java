@@ -42,6 +42,24 @@ public class LongestValidParenthesis {
     }
   }
 
+  private static int getParenthesisCountDP(String string) {
+    char[] chars = string.toCharArray();
+    int[] opt = new int[chars.length];
+    int maxCount = 0;
+
+    for(int i = 1; i < chars.length; ++i) {
+      if(chars[i] == ')') {
+        if(chars[i - 1] == '(') {
+          opt[i] = ((i >= 2) ? opt[i - 2] : 0) + 2;
+        } else if(i - opt[i - 1] > 0 && chars[i - opt[i - 1] - 1] == '(') {
+          opt[i] = opt[i - 1] + ((i - opt[i-1] >= 2) ? opt[i - opt[i - 1] - 2] : 0) + 2;
+        }
+      }
+      maxCount = Math.max(maxCount, opt[i]);
+    }
+    return maxCount;
+  }
+
   private static int getParenthesisCount(String string) {
     int leftCount, rightCount, validCount, maxCount = 0;
     char[] chars = string.toCharArray();
@@ -75,7 +93,7 @@ public class LongestValidParenthesis {
 
     String string = in.next();
 
-    out.println(getParenthesisCount(string));
+    out.println(getParenthesisCountDP(string));
     out.close();
     in.close();
   }
