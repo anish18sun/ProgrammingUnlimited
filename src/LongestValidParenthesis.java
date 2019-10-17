@@ -61,30 +61,36 @@ public class LongestValidParenthesis {
   }
 
   private static int getParenthesisCount(String string) {
-    int leftCount, rightCount, validCount, maxCount = 0;
+    int leftCount = 0, rightCount = 0, maxCount = 0;
     char[] chars = string.toCharArray();
 
-    for(int i = 0; i < chars.length - 1; ++i) {
-      for (int j = i + 1; j < chars.length; j += 2) {
-        leftCount = 0; validCount = 0; rightCount = 0;
-        for(int k = i; k <= j; ++k) {
-          char c = chars[k];
-          if (c == '(') {
-            leftCount++;
-          }
-          else if (c == ')' && leftCount > 0) {
-            leftCount--;
-            validCount++;
-          } else {
-            rightCount++;
-          }
-        }
-        if(leftCount == 0 && rightCount == 0) {
-          maxCount = Math.max(maxCount, validCount);
-        }
+    for(int i = 0; i < chars.length; ++i) {
+      if(chars[i] == '(') {
+        leftCount++;
+      } else {
+        rightCount++;
+      }
+      if(leftCount == rightCount) {
+        maxCount = Math.max(maxCount, 2 * rightCount);
+      } else if(rightCount > leftCount) {
+        leftCount = rightCount = 0;
       }
     }
-    return maxCount * 2;
+
+    leftCount = rightCount = 0;
+    for(int i = chars.length - 1; i >= 0; --i) {
+      if(chars[i] == '(') {
+        leftCount++;
+      } else {
+        rightCount++;
+      }
+      if(leftCount == rightCount) {
+        maxCount = Math.max(maxCount, 2 * leftCount);
+      } else if(leftCount > rightCount) {
+        leftCount = rightCount = 0;
+      }
+    }
+    return maxCount;
   }
 
   public static void main(String[] args) {
@@ -93,7 +99,7 @@ public class LongestValidParenthesis {
 
     String string = in.next();
 
-    out.println(getParenthesisCountDP(string));
+    out.println(getParenthesisCount(string));
     out.close();
     in.close();
   }
