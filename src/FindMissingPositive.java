@@ -42,21 +42,21 @@ public class FindMissingPositive {
     }
   }
 
-  private static final int DIVISOR = 31;
+  private static final int DIVISOR = 63;
   private static final int N = 100000007;
 
-  private static void setBit(int[] check, int index, int offset) {
-    int bitSet = 1 << offset;
+  private static void setBit(long[] check, int index, long offset) {
+    long bitSet = 1 << offset;
     check[index] |= bitSet;
   }
 
-  private static boolean isBitSet(int[] check, int index, int offset) {
-    int bitSet = 1 << offset;
+  private static boolean isBitSet(long[] check, int index, long offset) {
+    long bitSet = 1 << offset;
     return (check[index] & bitSet) > 0;
   }
 
   private static int getMissingNumber(int[] arr, int n) {
-    int[] check = new int[N];
+    long[] check = new long[N];
 
     for(int number: arr) {
       if(number > 0) {
