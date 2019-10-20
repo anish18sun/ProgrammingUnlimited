@@ -42,34 +42,53 @@ public class FindMissingPositive {
     }
   }
 
-  private static final int DIVISOR = 63;
-  private static final int N = 100000007;
+  private static int partition(int[] arr, int l, int r, int x) {
+    int i = l-1, j = l;
+    for(; j < r+1; ++j) {
+      if(arr[j] < x) {
+        ++i;
+        int temp = arr[j];
+        arr[j] = arr[i];
+        arr[i] = temp;
+      }
+    }
+    i++;
+    for(j = i; j < r+1; ++j) { if(arr[j] == x) { break; }}
+    int temp = arr[j];
+    arr[j] = arr[i];
+    arr[i] = temp;
 
-  private static void setBit(long[] check, int index, long offset) {
-    long bitSet = 1 << offset;
-    check[index] |= bitSet;
+    return i;
   }
 
-  private static boolean isBitSet(long[] check, int index, long offset) {
-    long bitSet = 1 << offset;
-    return (check[index] & bitSet) > 0;
+  private static int getMinimum(int[] arr) {
+    int min = Integer.MAX_VALUE;
+    for(int number: arr) {
+      if(number > 0) {
+        min = Math.min(min, number);
+      }
+    }
+    return min;
   }
 
   private static int getMissingNumber(int[] arr, int n) {
-    long[] check = new long[N];
+    int min = getMinimum(arr);
+    if(min == Integer.MAX_VALUE) { return 1; }
+    int index = partition(arr,0, n-1 , min);
 
-    for(int number: arr) {
-      if(number > 0) {
-        setBit(check, number / DIVISOR, number % DIVISOR);
+    for(int i = index; i < n; ++i) {
+      int x = Math.abs(arr[i]);
+      if((x-1) < (n - index) && (arr[x-1 + index] > 0)) {
+        arr[x-1 + index] = -arr[x-1 + index];
       }
     }
 
-    for(int i = 1; i < N; ++i) {
-     if(!isBitSet(check, i / DIVISOR, i % DIVISOR)) {
-       return i;
-     }
+    for(int i = index; i < n; ++i) {
+      if(arr[i] > 0) {
+        return i - index + 1;
+      }
     }
-    return 0;
+    return n - index + 1;
   }
 
   public static void main(String[] args) {
